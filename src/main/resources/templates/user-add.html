@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户添加</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+</head>
+<body style="padding: 20px;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" placeholder="请输入用户名" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" name="email" placeholder="请输入邮箱" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄</label>
+            <div class="layui-input-inline">
+                <input type="text" name="age" placeholder="请输入年龄" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="button" lay-submit="" lay-filter="submit-btn">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</body>
+<script charset="utf-8" th:src="@{/common.js}"></script>
+<script charset="utf-8" th:src="@{/layui/layui.js}"></script>
+
+<script>
+    layui.use(['form', 'layer'], function () {
+        $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+
+        // 监听提交
+        form.on('submit(submit-btn)', function (form) {
+            $.post('/user/add', form.field, function (result) {
+                handlerResult(result, addDone);
+            });
+            return false;
+        });
+
+        function addDone(data) {
+            layer.msg("添加成功", {icon: 6});
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+</head>
+<body>
+
+<table class="layui-hide" id="user-table"></table>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="add">新增</a>
+</script>
+
+<script type="text/html" id="column-toolbar">
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+
+</body>
+<script charset="utf-8" th:src="@{/common.js}"></script>
+<script charset="utf-8" th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+        var $ = layui.$;
+
+        table.render({
+            elem: '#user-table'
+            , url: '/user/list'
+            , toolbar: '#toolbar'
+            , cols: [
+                [
+                    {field: 'id', title: 'ID', sort: true}
+                    , {field: 'username', title: '用户名'}
+                    , {field: 'email', title: '邮箱'}
+                    , {field: 'age', title: '年龄'}
+                    , {title: '操作', align: 'center', toolbar: '#column-toolbar'}
+                ]
+            ]
+        });
+
+        table.on('toolbar', function (obj) {
+            var data = obj.data;
+            var event = obj.event;
+
+            if (event === 'add') {
+                layer.open({
+                    type: 2,
+                    area: ['500px', '500px'],
+                    fix: false,
+                    maxmin: true,
+                    shadeClose: true,
+                    shade: 0.4,
+                    title: "用户添加",
+                    content: "/user/add",
+                    end: function () {
+                        table.reload('user-table');
+                    }
+                });
+            }
+        });
+
+        // 行点击事件
+        table.on('tool', function (obj) {
+            var data = obj.data;
+            var event = obj.event;
+            if (event === 'del') {
+                $.ajax({
+                    type: "DELETE",
+                    url: '/user/delete/' + data.id,
+                    dataType: "json",
+                    success: function(result){
+                        handlerResult(result, deleteDone);
+                    }
+                });
+            }
+        });
+
+        function deleteDone(data) {
+            parent.layer.msg("删除成功");
+            table.reload('user-table');
+        }
+    });
+</script>
+
+</html>
