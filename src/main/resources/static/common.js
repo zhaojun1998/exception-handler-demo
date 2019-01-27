@@ -16,16 +16,20 @@ function handlerResult(result, fn) {
     if (result.code === 0) {
         fn(result.data);
     }
-    // 用户操作异常, 这里可以对 1 或 2 等错误码进行单独处理, 也可以 result.code > 0 来粗粒度的处理, 根据业务而定.
-    else if (result.code === 1) {
-        showError(result.message);
-    }
-    // 系统异常, 这里可以对 -1 或 -2 等错误码进行单独处理, 也可以 result.code > 0 来粗粒度的处理, 根据业务而定.
-    else if (result.code === -1) {
-        showError(result.message);
-    }
-    // 如果进行细粒度的状态码判断, 那么就应该重点注意这里没出现过的状态码. 这个判断仅建议在开发阶段保留用来发现未定义的状态码.
+    // 这里可以根据不同的状态码做不同的业务,  如提示框不同, 或某个状态码标识未登录, 跳转到登录页面
+    // else if (result.code === 1) {
+    //     showError(result.message);
+    // }
     else {
-        showError("出现未定义的状态码:" + result.code);
+        showError(result.message);
     }
 }
+
+/**
+ * jQuery 全局异常处理, 处理 document 中的所有 ajax 的 error 事件.
+ */
+$(document).ajaxError(function(event, response){
+    console.log("错误响应状态码: ",response.status);
+    console.log("错误响应结果: ",response.responseJSON);
+    showError(response.responseJSON.message);
+});

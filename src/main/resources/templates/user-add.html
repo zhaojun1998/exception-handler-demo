@@ -33,8 +33,9 @@
         </div>
     </form>
 </body>
-<script charset="utf-8" th:src="@{/common.js}"></script>
-<script charset="utf-8" th:src="@{/layui/layui.js}"></script>
+<script charset="UTF-8" th:src="@{/jquery.min.js}"></script>
+<script charset="UTF-8" th:src="@{/layui/layui.js}"></script>
+<script charset="UTF-8" th:src="@{/common.js}"></script>
 
 <script>
     layui.use(['form', 'layer'], function () {
@@ -44,7 +45,8 @@
 
         // 监听提交
         form.on('submit(submit-btn)', function (form) {
-            $.post('/user/add', form.field, function (result) {
+            $.post('/user/add', form.field, function (result, status) {
+                console.log(status);
                 handlerResult(result, addDone);
             });
             return false;

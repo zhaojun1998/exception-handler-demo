@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping("/list")
     @ResponseBody
-    public ResultBean<User> list() {
+    public ResultBean list() {
         return ResultBean.success(userService.selectAll());
     }
 
